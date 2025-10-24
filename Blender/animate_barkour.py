@@ -24,10 +24,9 @@ Features:
 
 import bpy
 import json
-import math
 from pathlib import Path
-from mathutils import Vector, Quaternion, Euler
-from bpy.props import StringProperty, BoolProperty, IntProperty
+from mathutils import Vector, Quaternion
+from bpy.props import StringProperty, BoolProperty
 from bpy_extras.io_utils import ImportHelper
 
 
@@ -96,6 +95,21 @@ class AnimationDataParser:
 # ============================================================================
 # Barkour Robot Animator
 # ============================================================================
+
+
+AXIS_Z = Vector((0.0, 0.0, 1.0))
+LEG_SEGMENTS = (
+    ("hx", "leg_{descriptor}"),
+    ("hy", "upper_leg_{descriptor}"),
+    ("kn", "lower_leg_{descriptor}"),
+)
+LEG_ORDER = (
+    ("fl", "front_left"),
+    ("hl", "hind_left"),
+    ("fr", "front_right"),
+    ("hr", "hind_right"),
+)
+
 
 class BarkourRobotAnimator:
     """Animate Barkour robot in Blender."""
@@ -310,29 +324,15 @@ class BarkourRobotAnimator:
         - knee joint (kn): rotates lower_leg_* body around Y-axis (knee bend)
         """
         
-        axis_z = Vector((0.0, 0.0, 1.0))
-
-        return [
-            # Front Left Leg (indices 0-2)
-            {'joint': 'fl_hx', 'body': 'leg_front_left', 'axis': axis_z.copy()},
-            {'joint': 'fl_hy', 'body': 'upper_leg_front_left', 'axis': axis_z.copy()},
-            {'joint': 'fl_kn', 'body': 'lower_leg_front_left', 'axis': axis_z.copy()},
-
-            # Hind Left Leg (indices 3-5)
-            {'joint': 'hl_hx', 'body': 'leg_hind_left', 'axis': axis_z.copy()},
-            {'joint': 'hl_hy', 'body': 'upper_leg_hind_left', 'axis': axis_z.copy()},
-            {'joint': 'hl_kn', 'body': 'lower_leg_hind_left', 'axis': axis_z.copy()},
-
-            # Front Right Leg (indices 6-8)
-            {'joint': 'fr_hx', 'body': 'leg_front_right', 'axis': axis_z.copy()},
-            {'joint': 'fr_hy', 'body': 'upper_leg_front_right', 'axis': axis_z.copy()},
-            {'joint': 'fr_kn', 'body': 'lower_leg_front_right', 'axis': axis_z.copy()},
-
-            # Hind Right Leg (indices 9-11)
-            {'joint': 'hr_hx', 'body': 'leg_hind_right', 'axis': axis_z.copy()},
-            {'joint': 'hr_hy', 'body': 'upper_leg_hind_right', 'axis': axis_z.copy()},
-            {'joint': 'hr_kn', 'body': 'lower_leg_hind_right', 'axis': axis_z.copy()},
-        ]
+        mapping = []
+        for prefix, descriptor in LEG_ORDER:
+            for suffix, body_template in LEG_SEGMENTS:
+                mapping.append({
+                    'joint': f"{prefix}_{suffix}",
+                    'body': body_template.format(descriptor=descriptor),
+                    'axis': AXIS_Z.copy(),
+                })
+        return mapping
     
     def clear_animation(self):
         """Clear all animation data from robot objects."""

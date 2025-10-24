@@ -29,9 +29,8 @@ Usage:
 import bpy
 import xml.etree.ElementTree as ET
 import os
-import math
-from mathutils import Vector, Quaternion, Euler, Matrix
-from bpy.props import StringProperty, BoolProperty, EnumProperty
+from mathutils import Vector, Quaternion
+from bpy.props import StringProperty, BoolProperty
 from bpy_extras.io_utils import ImportHelper
 
 bl_info = {

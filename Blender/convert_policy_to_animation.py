@@ -18,7 +18,6 @@ import argparse
 import json
 import sys
 from pathlib import Path
-import numpy as np
 
 # Add parent directory to path to import from main scripts
 sys.path.append(str(Path(__file__).parent.parent))
