@@ -1,0 +1,25 @@
+# Core dependencies for Barkour Quadruped Simulation
+# Install with: pip install -r requirements.txt
+
+# For GPU support, install JAX with CUDA first:
+#   pip install -U "jax[cuda12]"
+# For CPU only:
+#   pip install -U jax
+
+# MuJoCo and MJX
+mujoco>=3.0.0
+mujoco_mjx>=3.0.0
+
+# Brax and RL dependencies
+brax>=0.9.0
+ml_collections>=0.1.1
+flax>=0.7.0
+orbax-checkpoint>=0.4.0
+
+# Video rendering
+mediapy>=1.1.0
+opencv-python>=4.8.0
+
+# Utilities
+etils>=1.5.0
+numpy>=1.24.0
